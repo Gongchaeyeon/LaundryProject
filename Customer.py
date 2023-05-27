@@ -121,7 +121,9 @@ class Detail(QDialog):
             self.close()
             win.showModal()
         elif text == "결제하기":
-            pass
+            win = Pay()
+            self.close()
+            win.showModal()
     def showModal(self):
         return super().exec_()
 
@@ -151,8 +153,11 @@ class Pay(QDialog):
 
         back = QPushButton('뒤로가기',self)
         pay = QPushButton('결제완료',self)
+
         back.setGeometry(200,200,90,30)
         pay.setGeometry(300, 200, 90, 30)
+
+        pay.clicked.connect(self.ButtonClicked)
         back.clicked.connect(self.ButtonClicked)
 
         self.setGeometry(300,300,400,250)
@@ -161,11 +166,15 @@ class Pay(QDialog):
         text = self.sender().text()
 
         if text == "뒤로가기":
-            pass
-        else: # 결제완료
             win = Detail()
             self.close()
             win.showModal()
+
+        else: # 결제완료
+            win = StartLaundry()
+            self.close()
+            win.showModal()
+
     def showModal(self):
         return super().exec_()
 
@@ -192,7 +201,6 @@ class StartLaundry(QDialog):
 
         label3 = QLabel('남은 시간: ', self)
         label3.setGeometry(10, 190, 100, 40)
-
 
         exit = QPushButton('강제종료', self)
         exit.setGeometry(300, 200, 90, 30)
