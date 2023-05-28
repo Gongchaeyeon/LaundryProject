@@ -29,7 +29,7 @@ class Login(QDialog):
         self.tf1 = QLineEdit(self)
         self.tf1.move(50, 80)
 
-        lb2 = QLabel("ID: ", self)
+        lb2 = QLabel("PW: ", self)
         lb2.setGeometry(10, 120, 100, 20)
         self.tf2 = QLineEdit(self)
         self.tf2.move(50, 120)
@@ -190,8 +190,8 @@ class InventoryCheck(QDialog): #재고 확인
         super().__init__()
         self.initUI()
     def initUI(self):
-        cnt=0
 
+        cnt=0
         label1 = QLabel('재고관리', self)
         font1 = label1.font()
         font1.setPointSize(15)
@@ -213,7 +213,6 @@ class InventoryCheck(QDialog): #재고 확인
             datalist.append(b)
             datalist.append(c[:-1])
             cnt+=1
-
         f.close()
 
         self.ta1.setRowCount(cnt)
@@ -222,33 +221,39 @@ class InventoryCheck(QDialog): #재고 확인
         for i in range(len(datalist)):
             self.ta1.setItem(r, c, QTableWidgetItem(datalist[i]))
             self.ta1.item(r,c).setTextAlignment(Qt.AlignCenter)
-
-
             c += 1
             if c%3==0: r+=1; c=0
 
         self.ta1.setColumnWidth(0,90)
-
         self.ta1.resize(200, 200)
         self.ta1.setGeometry(20, 50, 400, 200)
         self.ta1.setHorizontalHeaderLabels(table_column)
 
-#       버튼 ------------------------------------------
         back = QPushButton('뒤로가기',self)
-        back.move(210, 280)
-        back.resize(100, 30)
-        back.clicked.connect(self.ButtonClicked)
         exit = QPushButton('Exit',self)
+        edit = QPushButton('Edit',self)
+
+        back.move(210, 280)
         exit.move(320, 280)
+        edit.move(320,10)
+
+        back.resize(100, 30)
         exit.resize(100, 30)
+        edit.resize(100, 30)
+
+        back.clicked.connect(self.ButtonClicked)
         exit.clicked.connect(self.ButtonClicked)
-#       -----------------------------------------------
+        edit.clicked.connect(self.ButtonClicked)
+
         self.setGeometry(300, 300, 450, 350)
 
     def ButtonClicked(self):
         text = self.sender().text()
-
-        if text == "뒤로가기":
+        if text == "Edit":
+            win = Edit()
+            self.close()
+            win.showModal()
+        elif text == "뒤로가기":
             win = AdminMain()
             self.close()
             win.showModal()
@@ -259,8 +264,50 @@ class InventoryCheck(QDialog): #재고 확인
     def showModal(self):
         return super().exec_()
 
+class Edit(QDialog): #재고 수량 수정
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+    def initUI(self):
+
+        label1 = QLabel('수정할 ID와 수량을 입력하세요.', self)
+        font1 = label1.font()
+        font1.setPointSize(10)
+        label1.setFont(font1)
+        label1.setGeometry(10, 20, 300, 50)
+        
+        lb1 = QLabel("상품ID: ", self)
+        lb1.setGeometry(10, 80, 80, 20)
+        self.tf1 = QLineEdit(self)
+        self.tf1.move(80, 80)
+
+        lb2 = QLabel("재고: ", self)
+        lb2.setGeometry(15, 120, 80, 20)
+        self.tf2 = QLineEdit(self)
+        self.tf2.move(80, 120)
+
+        edit = QPushButton("수정", self)
+        edit.move(290, 70)
+        edit.resize(80, 80)
+
+        self.setGeometry(300, 300, 400, 200)
+
+        edit.clicked.connect(self.ButtonClicked)
+
+    def ButtonClicked(self):
+        if self.tf1.text() == '' and self.tf2.text() == '':
+            print("공백X")
+        #ID가 없을 때 -> try문으로 할 것
+        #혹은 제대로 되었을 때 완료되었음 표시
+        win = AdminMain()
+        self.close()
+        win.showModal()
+
+    def showModal(self):
+        return super().exec_()
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ma = SalesCheck()
+    ma = AdminMain()
     ma.show()
     sys.exit(app.exec_())
