@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from Main import *
+import pickle
 
 class NewLaundry(QDialog):
     def __init__(self):

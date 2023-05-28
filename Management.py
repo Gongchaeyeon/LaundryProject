@@ -2,12 +2,31 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from Main import *
+import pickle
+
+
+def readRankDB(self):  # ----------------------[데이터 읽어오기]
+    try:
+        fh = open(self.dbfilename, 'rb')
+    except FileNotFoundError as e:
+        self.db = []
+        return
+    try:
+        self.db = pickle.load(fh)
+    except:
+        pass
+    fh.close()
 
 class Login(QDialog):
     def __init__(self):
         super().__init__()
-        self.initUI()
 
+        self.dbfilename = 'Data/sales.txt'
+        # self.ReadDB()
+        # self.ViewDB()
+        # self.WriteDB()
+        # self.ViewSales()
+        self.initUI()
     def initUI(self):
 
         label1 = QLabel('관리자 로그인', self)
@@ -114,25 +133,25 @@ class SalesCheck(QDialog): #매출 확인
 
         self.ta1 = QTableWidget(self)
         self.ta1.resize(200, 200)
-        self.ta1.setGeometry(20, 50, 500, 200)
+        self.ta1.setGeometry(20, 50, 400, 200)
 
-        self.ta1.setColumnCount(4)
+        self.ta1.setColumnCount(3)
 
-        table_column=["번호", "상품", "수량", "가격"]
+        table_column=["번호", "날짜", "가격"]
 
         self.ta1.setHorizontalHeaderLabels(table_column)
 
-#       버튼 ------------------------------------------
-        back = QPushButton('뒤로가기',self)
-        back.move(310, 280)
+        #       버튼 ------------------------------------------
+        back = QPushButton('뒤로가기', self)
+        back.move(210, 280)
         back.resize(100, 30)
         back.clicked.connect(self.ButtonClicked)
-        exit = QPushButton('Exit',self)
-        exit.move(420, 280)
+        exit = QPushButton('Exit', self)
+        exit.move(320, 280)
         exit.resize(100, 30)
         exit.clicked.connect(self.ButtonClicked)
-#       -----------------------------------------------
-        self.setGeometry(300, 300, 550, 350)
+        #       -----------------------------------------------
+        self.setGeometry(300, 300, 450, 350)
 
     def ButtonClicked(self):
         text = self.sender().text()
@@ -145,6 +164,20 @@ class SalesCheck(QDialog): #매출 확인
             option = QtWidgets.QMessageBox.warning(self, "경고", "프로그램을 종료하시겠습니까?",QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes)
             if option == QtWidgets.QMessageBox.Yes:
                 sys.exit(0)
+
+    def ReadDB(self):
+        try:
+            fh = open(self.dbfilename,'rb')
+        except FileNotFoundError as e:
+            self.db=[]
+            return
+        try:
+            self.db = pickle.load(fh)
+        except:
+            pass
+        fh.close()
+
+
     def showModal(self):
         return super().exec_()
 

@@ -62,6 +62,5 @@ class FirstWindow(QMainWindow):
             if option == QtWidgets.QMessageBox.Yes:
                 sys.exit(0)
 
-
     def show(self):
         super().show()
