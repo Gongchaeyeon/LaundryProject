@@ -110,11 +110,20 @@ class SalesCheck(QDialog): #매출 확인
 
     def initUI(self):
 
+        cnt=0
+        price = 0
+
         label1 = QLabel('매출표', self)
         font1 = label1.font()
         font1.setPointSize(15)
         label1.setFont(font1)
         label1.setGeometry(20, 20, 300, 25)
+
+        label2 = QLabel(' test ', self)
+        font1 = label1.font()
+        font1.setPointSize(10)
+        label2.setFont(font1)
+        label2.setGeometry(20, 280, 300, 25)
 
         self.ta1 = QTableWidget(self)
         self.ta1.resize(200, 200)
@@ -123,6 +132,30 @@ class SalesCheck(QDialog): #매출 확인
 
         table_column=["번호", "날짜", "가격"]
 
+        datalist=[]
+        f = open("Data\Sale.txt", 'r')
+
+        while True:
+            data = f.readline()
+            if data == '\n': break
+            a,b,c = data.split('\t')
+            price+=int(c)
+            datalist.append(a)
+            datalist.append(b)
+            datalist.append(c[:-1])
+            cnt+=1
+        f.close()
+
+        self.ta1.setRowCount(cnt)
+
+        r=0; c=0
+        for i in range(len(datalist)):
+            self.ta1.setItem(r, c, QTableWidgetItem(datalist[i]))
+            self.ta1.item(r,c).setTextAlignment(Qt.AlignCenter)
+            c += 1
+            if c%3==0: r+=1; c=0
+        label2.setText('총매출액: {}'.format(price))
+        self.ta1.setColumnWidth(0,90)
         self.ta1.setHorizontalHeaderLabels(table_column)
 
         #       버튼 ------------------------------------------
@@ -158,6 +191,7 @@ class InventoryCheck(QDialog): #재고 확인
         self.initUI()
     def initUI(self):
         cnt=0
+
         label1 = QLabel('재고관리', self)
         font1 = label1.font()
         font1.setPointSize(15)
@@ -227,6 +261,6 @@ class InventoryCheck(QDialog): #재고 확인
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ma = InventoryCheck()
+    ma = SalesCheck()
     ma.show()
     sys.exit(app.exec_())
