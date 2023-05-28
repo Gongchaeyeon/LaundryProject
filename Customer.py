@@ -4,6 +4,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from Main import *
 import pickle
+import datetime
+n_time = 10
 course=''
 total_price=0
 
@@ -200,6 +202,10 @@ class StartLaundry(QDialog):
         self.initUI()
 
     def initUI(self):
+        global n_time
+        self.timer = QTimer(self)
+        self.timer.start(1000)
+        self.timer.timeout.connect(self.time_update)    # start time out시 연결할 함수
 
         label1 = QLabel('laundry 24 System', self)
         font1 = label1.font()
@@ -213,8 +219,8 @@ class StartLaundry(QDialog):
         label2.setFont(font1)
         label2.setGeometry(70, 100, 300, 40)
 
-        label3 = QLabel('남은 시간: ', self)
-        label3.setGeometry(10, 190, 100, 40)
+        self.label3 = QLabel('남은 시간: {}초'.format(n_time), self)
+        self.label3.setGeometry(10, 190, 150, 40)
 
         exit = QPushButton('강제종료', self)
         exit.setGeometry(300, 200, 90, 30)
@@ -227,6 +233,17 @@ class StartLaundry(QDialog):
                                                QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes)
         if option == QtWidgets.QMessageBox.Yes:
             sys.exit(0)
+    def time_update(self):
+        global n_time
+        n_time -= 1
+        if n_time == 0:
+            win = Done()
+            self.close()
+            win.showModal()
+        else:
+            self.label3.setText('남은 시간: {}초'.format(n_time))
+    def timeout(self):
+        pass
 
     def showModal(self):
         return super().exec_()
