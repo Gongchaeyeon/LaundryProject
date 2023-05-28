@@ -49,15 +49,14 @@ class NewLaundry(QDialog):
         global total_price
 
         text = self.sender().text()
-        course=text
-        total_price = int(course.split('+')[1])
-
         if text == "Exit":
-            option = QtWidgets.QMessageBox.warning(self, "경고", "프로그램을 종료하시겠습니까?",
-                                                   QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes)
+            option = QtWidgets.QMessageBox.warning(self, "경고", "프로그램을 종료하시겠습니까?",QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes)
             if option == QtWidgets.QMessageBox.Yes:
                 sys.exit(0)
+
         else:
+            course = text
+            total_price = int(course.split('+')[1])
 
             win = Detail()
             self.close()

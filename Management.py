@@ -44,7 +44,7 @@ class Login(QDialog):
 
     def ButtonClicked(self):
         if self.tf1.text() == 'admin' and self.tf2.text() == '1234':
-            win = AdminMain()
+            win = SalesCheck()
             self.close()
             win.showModal()
 
@@ -159,10 +159,7 @@ class SalesCheck(QDialog): #매출 확인
         self.ta1.setHorizontalHeaderLabels(table_column)
 
         #       버튼 ------------------------------------------
-        back = QPushButton('뒤로가기', self)
-        back.move(210, 280)
-        back.resize(100, 30)
-        back.clicked.connect(self.ButtonClicked)
+
         exit = QPushButton('Exit', self)
         exit.move(320, 280)
         exit.resize(100, 30)
@@ -171,16 +168,9 @@ class SalesCheck(QDialog): #매출 확인
         self.setGeometry(300, 300, 450, 350)
 
     def ButtonClicked(self):
-        text = self.sender().text()
-
-        if text == "뒤로가기":
-            win = AdminMain()
-            self.close()
-            win.showModal()
-        elif text == "Exit":
-            option = QtWidgets.QMessageBox.warning(self, "경고", "프로그램을 종료하시겠습니까?",QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes)
-            if option == QtWidgets.QMessageBox.Yes:
-                sys.exit(0)
+        option = QtWidgets.QMessageBox.warning(self, "경고", "프로그램을 종료하시겠습니까?",QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes)
+        if option == QtWidgets.QMessageBox.Yes:
+            sys.exit(0)
 
     def showModal(self):
         return super().exec_()
