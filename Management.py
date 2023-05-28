@@ -1,21 +1,10 @@
+#-*- coding:utf-8 -*-
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from Main import *
 import pickle
-
-
-def readRankDB(self):  # ----------------------[데이터 읽어오기]
-    try:
-        fh = open(self.dbfilename, 'rb')
-    except FileNotFoundError as e:
-        self.db = []
-        return
-    try:
-        self.db = pickle.load(fh)
-    except:
-        pass
-    fh.close()
+from Data import *
 
 class Login(QDialog):
     def __init__(self):
@@ -77,7 +66,7 @@ class AdminMain(QDialog): #관리자 main 화면
         label1.setGeometry(120, 0, 300, 50)
 
 
-        Inventory = QPushButton("재고확인", self)
+        Inventory = QPushButton("재고관리", self)
         Inventory.move(30, 80)
         Inventory.resize(170, 170)
 
@@ -98,13 +87,11 @@ class AdminMain(QDialog): #관리자 main 화면
     def ButtonClicked(self):
         text = self.sender().text()
 
-        if text == "재고확인":
-            print("재고확인")
+        if text == "재고관리":
             win = InventoryCheck()
             self.close()
             win.showModal()
         elif text == "매출확인":
-            print("매출확인")
             win = SalesCheck()
             self.close()
             win.showModal()
@@ -124,17 +111,14 @@ class SalesCheck(QDialog): #매출 확인
     def initUI(self):
 
         label1 = QLabel('매출표', self)
-
         font1 = label1.font()
         font1.setPointSize(15)
         label1.setFont(font1)
         label1.setGeometry(20, 20, 300, 25)
 
-
         self.ta1 = QTableWidget(self)
         self.ta1.resize(200, 200)
         self.ta1.setGeometry(20, 50, 400, 200)
-
         self.ta1.setColumnCount(3)
 
         table_column=["번호", "날짜", "가격"]
@@ -165,19 +149,6 @@ class SalesCheck(QDialog): #매출 확인
             if option == QtWidgets.QMessageBox.Yes:
                 sys.exit(0)
 
-    def ReadDB(self):
-        try:
-            fh = open(self.dbfilename,'rb')
-        except FileNotFoundError as e:
-            self.db=[]
-            return
-        try:
-            self.db = pickle.load(fh)
-        except:
-            pass
-        fh.close()
-
-
     def showModal(self):
         return super().exec_()
 
@@ -185,25 +156,47 @@ class InventoryCheck(QDialog): #재고 확인
     def __init__(self):
         super().__init__()
         self.initUI()
-
     def initUI(self):
-
-        label1 = QLabel('재고확인', self)
-
+        cnt=0
+        label1 = QLabel('재고관리', self)
         font1 = label1.font()
         font1.setPointSize(15)
         label1.setFont(font1)
         label1.setGeometry(20, 20, 300, 25)
 
-
         self.ta1 = QTableWidget(self)
-        self.ta1.resize(200, 200)
-        self.ta1.setGeometry(20, 50, 400, 200)
-
         self.ta1.setColumnCount(3)
 
         table_column=["상품ID", "상품", "재고"]
 
+        datalist=[]
+        f = open("Data\Inventory.txt", 'r')
+        while True:
+            data = f.readline()
+            if data == '\n': break
+            a,b,c = data.split('\t')
+            datalist.append(a)
+            datalist.append(b)
+            datalist.append(c[:-1])
+            cnt+=1
+
+        f.close()
+
+        self.ta1.setRowCount(cnt)
+
+        r=0; c=0
+        for i in range(len(datalist)):
+            self.ta1.setItem(r, c, QTableWidgetItem(datalist[i]))
+            self.ta1.item(r,c).setTextAlignment(Qt.AlignCenter)
+
+
+            c += 1
+            if c%3==0: r+=1; c=0
+
+        self.ta1.setColumnWidth(0,90)
+
+        self.ta1.resize(200, 200)
+        self.ta1.setGeometry(20, 50, 400, 200)
         self.ta1.setHorizontalHeaderLabels(table_column)
 
 #       버튼 ------------------------------------------
@@ -229,7 +222,6 @@ class InventoryCheck(QDialog): #재고 확인
             option = QtWidgets.QMessageBox.warning(self, "경고", "프로그램을 종료하시겠습니까?",QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Yes)
             if option == QtWidgets.QMessageBox.Yes:
                 sys.exit(0)
-
     def showModal(self):
         return super().exec_()
 

@@ -1,3 +1,5 @@
+#-*- coding:utf-8 -*-
+
 import sys
 from Main import FirstWindow
 from PyQt5.QtWidgets import *
