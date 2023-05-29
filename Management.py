@@ -96,15 +96,30 @@ class AdminMain(QDialog): #관리자 main 화면
     def showModal(self):
         return super().exec_()
 
+
+class ShowData:
+    datalist = []
+    f = open("Data\Sale.txt", 'r')
+    cnt = 0
+    price = 0
+    while True:
+        data = f.readline()
+        if data == '\n': break
+        a, b, c = data.split('\t')
+        price += int(c)
+        datalist.append(a)
+        datalist.append(b)
+        datalist.append(c[:-1])
+        cnt += 1
+    f.close()
+
+
 class SalesCheck(QDialog): #매출 확인
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
-
-        cnt=0
-        price = 0
 
         label1 = QLabel('매출표', self)
         font1 = label1.font()
@@ -125,29 +140,17 @@ class SalesCheck(QDialog): #매출 확인
 
         table_column=["번호", "날짜", "가격"]
 
-        datalist=[]
-        f = open("Data\Sale.txt", 'r')
-
-        while True:
-            data = f.readline()
-            if data == '\n': break
-            a,b,c = data.split('\t')
-            price+=int(c)
-            datalist.append(a)
-            datalist.append(b)
-            datalist.append(c[:-1])
-            cnt+=1
-        f.close()
-
-        self.ta1.setRowCount(cnt)
+        D = ShowData()
+        self.ta1.setRowCount(D.cnt)
 
         r=0; c=0
-        for i in range(len(datalist)):
-            self.ta1.setItem(r, c, QTableWidgetItem(datalist[i]))
+
+        for i in range(len(D.datalist)):
+            self.ta1.setItem(r, c, QTableWidgetItem(D.datalist[i]))
             self.ta1.item(r,c).setTextAlignment(Qt.AlignCenter)
             c += 1
             if c%3==0: r+=1; c=0
-        label2.setText('총매출액: {}'.format(price))
+        label2.setText('총매출액: {}'.format(D.price))
         self.ta1.setColumnWidth(0,90)
         self.ta1.setHorizontalHeaderLabels(table_column)
 
@@ -288,6 +291,6 @@ class Edit(QDialog): #재고 수량 수정
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ma = AdminMain()
+    ma = SalesCheck()
     ma.show()
     sys.exit(app.exec_())

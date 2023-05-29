@@ -6,13 +6,18 @@ from Main import *
 import pickle
 import datetime
 n_time = 10
-course=''
-total_price=0
+
+class Course:
+    def __init__(self):
+        self.course = ''
+        self.total_price = 0
+
 
 class NewLaundry(QDialog):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.C = Course()
 
     def initUI(self):
 
@@ -45,8 +50,6 @@ class NewLaundry(QDialog):
         exit.clicked.connect(self.ButtonClicked)
 
     def ButtonClicked(self):
-        global course
-        global total_price
 
         text = self.sender().text()
         if text == "Exit":
@@ -55,10 +58,10 @@ class NewLaundry(QDialog):
                 sys.exit(0)
 
         else:
-            course = text
-            total_price = int(course.split('+')[1])
+            self.C.course = text
+            self.C.total_price = int(self.C.course.split('+')[1])
 
-            win = Detail()
+            win = Detail(self.C.course,self.C.total_price)
             self.close()
             win.showModal()
 
@@ -67,12 +70,13 @@ class NewLaundry(QDialog):
 #---------------------------------------------------------
 class Detail(QDialog):
 
-    def __init__(self):
+    def __init__(self,course,total_price):
         super().__init__()
+        self.course = course
+        self.total_price = total_price
         self.initUI()
 
     def initUI(self):
-        global course
 
         label1 = QLabel('laundry 24 System', self)
         font1 = label1.font()
@@ -89,7 +93,7 @@ class Detail(QDialog):
 
         label2.setGeometry(300, 50, 300, 50)
 
-        self.final = QLabel('기본 코스:{}\n'.format(course),self)
+        self.final = QLabel('기본 코스:{}\n'.format(self.course),self)
         self.final.setGeometry(300,100,300,300)
 
         back = QPushButton('뒤로가기',self)
@@ -120,7 +124,6 @@ class Detail(QDialog):
 
 
     def ButtonClicked(self):
-        global total_price
         text = self.sender().text()
 
         if text == "뒤로가기":
@@ -128,12 +131,12 @@ class Detail(QDialog):
             self.close()
             win.showModal()
         elif text == "결제하기":
-            win = Pay()
+            win = Pay(self.course, self.total_price)
             self.close()
             win.showModal()
         else:
-            total_price+=500
-            print(total_price)
+            self.total_price+=500
+            print(self.total_price)
             text = text.replace("\n", " ")
             self.final.setText(self.final.text()+'\n'+text)
 
@@ -142,20 +145,21 @@ class Detail(QDialog):
 
 #----------------------------------------------------
 class Pay(QDialog):
-    def __init__(self):
+    def __init__(self,course,total_price):
         super().__init__()
+        self.course = course
+        self.total_price = total_price
         self.initUI()
 
+
     def initUI(self):
-        global total_price
         label1 = QLabel('laundry 24 System', self)
         font1 = label1.font()
         font1.setPointSize(15)
         label1.setFont(font1)
         label1.setGeometry(95, 0, 300, 50)
 
-        k = total_price
-        label2 = QLabel('금액:{}'.format(k), self)
+        label2 = QLabel('금액:{}'.format(self.total_price), self)
         label2.setGeometry(130,50,300,100)
         font1 = label2.font()
         font1.setPointSize(15)
@@ -179,7 +183,7 @@ class Pay(QDialog):
         text = self.sender().text()
 
         if text == "뒤로가기":
-            win = Detail()
+            win = Detail(self.course, self.total_price)
             self.close()
             win.showModal()
 
