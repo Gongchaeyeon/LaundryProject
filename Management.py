@@ -9,15 +9,9 @@ from Data import *
 class Login(QDialog):
     def __init__(self):
         super().__init__()
-
-        self.dbfilename = 'Data/sales.txt'
-        # self.ReadDB()
-        # self.ViewDB()
-        # self.WriteDB()
-        # self.ViewSales()
         self.initUI()
-    def initUI(self):
 
+    def initUI(self):
         label1 = QLabel('관리자 로그인', self)
         font1 = label1.font()
         font1.setPointSize(15)
@@ -64,7 +58,6 @@ class AdminMain(QDialog): #관리자 main 화면
         font1.setPointSize(15)
         label1.setFont(font1)
         label1.setGeometry(120, 0, 300, 50)
-
 
         Inventory = QPushButton("재고관리", self)
         Inventory.move(30, 80)
@@ -281,14 +274,11 @@ class Edit(QDialog): #재고 수량 수정
         edit.resize(80, 80)
 
         self.setGeometry(300, 300, 400, 200)
-
         edit.clicked.connect(self.ButtonClicked)
 
     def ButtonClicked(self):
         if self.tf1.text() == '' and self.tf2.text() == '':
             print("공백X")
-        #ID가 없을 때 -> try문으로 할 것
-        #혹은 제대로 되었을 때 완료되었음 표시
         win = AdminMain()
         self.close()
         win.showModal()

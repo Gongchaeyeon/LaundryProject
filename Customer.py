@@ -121,7 +121,6 @@ class Detail(QDialog):
 
     def ButtonClicked(self):
         global total_price
-
         text = self.sender().text()
 
         if text == "뒤로가기":
@@ -137,7 +136,6 @@ class Detail(QDialog):
             print(total_price)
             text = text.replace("\n", " ")
             self.final.setText(self.final.text()+'\n'+text)
-
 
     def showModal(self):
         return super().exec_()
@@ -193,7 +191,6 @@ class Pay(QDialog):
     def showModal(self):
         return super().exec_()
 
-
 # ----------------------------------------------------
 class StartLaundry(QDialog):
     def __init__(self):
@@ -241,12 +238,9 @@ class StartLaundry(QDialog):
             win.showModal()
         else:
             self.label3.setText('남은 시간: {}초'.format(n_time))
-    def timeout(self):
-        pass
 
     def showModal(self):
         return super().exec_()
-
 
 # ----------------------------------------------------
 class Done(QDialog):

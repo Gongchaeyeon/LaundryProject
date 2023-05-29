@@ -10,7 +10,6 @@ from PyQt5.QtWidgets import *
 from Management import *
 from Customer import *
 
-
 class FirstWindow(QMainWindow):
     def __init__(self):
         super().__init__()
