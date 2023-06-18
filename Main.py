@@ -52,7 +52,6 @@ class FirstWindow(QMainWindow):
             self.close()
             win.showModal()
 
-
         elif text == "고객":
             win = NewLaundry()
             self.close()

@@ -1,8 +1,0 @@
-1	tech	100
-2	Persil	120
-3	Beat	100
-4	Pigeon	50
-5	Downy	50
-
-
-

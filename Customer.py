@@ -151,7 +151,6 @@ class Pay(QDialog):
         self.total_price = total_price
         self.initUI()
 
-
     def initUI(self):
         label1 = QLabel('laundry 24 System', self)
         font1 = label1.font()
